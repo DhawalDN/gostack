@@ -15,7 +15,7 @@ import (
 // MaxUploadSize :
 const MaxUploadSize = 20 * 1024 * 1024 // 2 mb
 // UploadPath :
-const UploadPath = "/tmp"
+const UploadPath = "/home/dhost/cdn/data"
 
 // UploadFileHandler :
 func UploadFileHandler() gin.HandlerFunc {

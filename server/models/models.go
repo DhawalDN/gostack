@@ -1,5 +1,8 @@
 package models
 
+// ProjectID that should be used for routing before Request
+var ProjectID string
+
 //Player : struct
 type Player struct {
 	PlayerID  string

@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"github.com/DhawalDN/gostack/server/helpers"
+	"github.com/DhawalDN/gostack/server/models"
 	"github.com/DhawalDN/gostack/server/routes"
 	"github.com/DhawalDN/gostack/server/services"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -16,15 +16,20 @@ import (
 func InitMiddleware(g *gin.Engine) {
 	g.Use(cors.Default()) // CORS request
 	fmt.Println("InitMiddleware called")
-	o := g.Group("/o")
-	o.Use(OpenRequestMiddleware())
-	r := g.Group("/r")
-	r.Use(RestrictedRequestMiddleware())
-	c := r.Group("/c")
-	c.Use(RoleBasedRequestMiddleware())
+	v1 := g.Group("/" + models.ProjectID + "")
+	{
+		o := v1.Group("/o")
+		o.Use(OpenRequestMiddleware())
+		r := v1.Group("/r")
+		r.Use(RestrictedRequestMiddleware())
+		c := v1.Group("/c")
+		c.Use(RoleBasedRequestMiddleware())
+
+		routes.InitLoginRoute(o)
+		routes.InitCdnRoutes(o)
+	}
+
 	// routes.InitAuctionRoute(r)
-	routes.InitLoginRoute(o)
-	routes.InitCdnRoutes(o)
 
 }
 
