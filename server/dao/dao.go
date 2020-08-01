@@ -6,7 +6,8 @@ var (
 	UsersDAO *MongoDAO
 	// LoginDAO - For DB Operation
 	LoginDAO *MongoDAO
-	// TeamsDAO *dao.MongoDAO
+	// CdnDAO *dao.MongoDAO
+	CdnDAO *MongoDAO
 )
 
 //InitDAO - Associate DAOs with respective collections
@@ -17,4 +18,5 @@ func InitDAO() {
 	// BiddingDAO = dao.GetMongoDAO("bidding")
 	UsersDAO = GetMongoDAO("users")
 	LoginDAO = GetMongoDAO("login")
+	CdnDAO = GetMongoDAO("cdnmetalist")
 }

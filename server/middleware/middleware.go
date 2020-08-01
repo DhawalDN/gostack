@@ -26,7 +26,7 @@ func InitMiddleware(g *gin.Engine) {
 		c.Use(RoleBasedRequestMiddleware())
 
 		routes.InitLoginRoute(o)
-		routes.InitCdnRoutes(o)
+		routes.InitCdnRoutes(o, r)
 	}
 
 	// routes.InitAuctionRoute(r)

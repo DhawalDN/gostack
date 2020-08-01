@@ -6,8 +6,9 @@ import (
 )
 
 // InitCdnRoutes :
-func InitCdnRoutes(o *gin.RouterGroup) {
+func InitCdnRoutes(o, r *gin.RouterGroup) {
 	o.POST("/upload", handlers.UploadFileHandler())
+	r.POST("/upload", handlers.UploadFileHandler())
 	// o.StaticFS("/files/", gin.Dir(handlers.UploadPath, true))
 	// o.Static("/files/", handlers.UploadPath)
 	// fs := http.FileServer(http.Dir(handlers.UploadPath))

@@ -8,8 +8,16 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 
+	"github.com/DhawalDN/gostack/server/dao"
+	"github.com/DhawalDN/gostack/server/helpers"
+
+	"github.com/DhawalDN/gostack/server/models"
 	"github.com/gin-gonic/gin"
+	"github.com/tidwall/gjson"
+	"github.com/tidwall/sjson"
 )
 
 // MaxUploadSize :
@@ -27,7 +35,18 @@ func UploadFileHandler() gin.HandlerFunc {
 			renderError(w, "FILE_TOO_BIG", http.StatusBadRequest)
 			return
 		}
-
+		resultDataStr := ""
+		dataToStoreInDBStr := ""
+		token := c.GetHeader("Authorization")
+		if strings.Trim(token, "") != "" {
+			login, _ := helpers.GetUserNameFromToken(c)
+			dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "username", login)
+			resultDataStr, _ = sjson.Set(resultDataStr, "isAuthorized", false)
+		} else {
+			dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "username", "unknown")
+		}
+		dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "createdOn", time.Now())
+		dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "isExpired", false)
 		// parse and validate file and post parameters
 		file, _, err := c.Request.FormFile("file")
 		if err != nil {
@@ -45,6 +64,7 @@ func UploadFileHandler() gin.HandlerFunc {
 		switch detectedFileType {
 		case "image/jpeg", "image/jpg":
 		case "image/gif", "image/png":
+		case "image/svg":
 		case "application/pdf":
 			break
 		default:
@@ -73,8 +93,17 @@ func UploadFileHandler() gin.HandlerFunc {
 			renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 			return
 		}
-		w.Write([]byte(randToken(12)))
-		w.Write([]byte("SUCCESS"))
+		dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName+fileEndings[0])
+		dataToStoreInDB := gjson.Parse(dataToStoreInDBStr)
+		err = dao.CdnDAO.Insert(dataToStoreInDB.Value())
+		if err != nil {
+			fmt.Println(err)
+		}
+		resultDataStr, _ = sjson.Set(resultDataStr, "result.relativePath", "/"+models.ProjectID+"/images/"+fileName+fileEndings[0])
+		resultData := gjson.Parse(resultDataStr)
+		// byt, _ := json.Marshal(resultData.Value())
+		c.JSON(200, resultData.Value())
+		// w.Write([]byte("SUCCESS"))
 	})
 }
 
