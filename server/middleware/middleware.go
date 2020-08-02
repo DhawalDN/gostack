@@ -56,14 +56,14 @@ func RestrictedRequestMiddleware() gin.HandlerFunc {
 			fmt.Println("Token not available")
 			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid API token"})
 		}
-		userres, isValid, usererr := services.ValidatedUser(login)
-		if usererr != nil || !isValid {
-			fmt.Println("Failed to validate user", userres)
-			c.AbortWithStatusJSON(401, gin.H{"error": "Failed to validate user"})
-		}
-		if !isValid {
-			c.AbortWithStatusJSON(401, gin.H{"error": "User Not Exists"})
-		}
+		// userres, isValid, usererr := services.ValidatedUser(login)
+		// if usererr != nil || !isValid {
+		// 	fmt.Println("Failed to validate user", userres)
+		// 	c.AbortWithStatusJSON(401, gin.H{"error": "Failed to validate user"})
+		// }
+		// if !isValid {
+		// 	c.AbortWithStatusJSON(401, gin.H{"error": "User Not Exists"})
+		// }
 		c.Next()
 		fmt.Println("RestrictedRequestMiddleware called")
 	}

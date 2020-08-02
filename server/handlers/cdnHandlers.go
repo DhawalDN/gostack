@@ -21,7 +21,7 @@ import (
 )
 
 // MaxUploadSize :
-const MaxUploadSize = 20 * 1024 * 1024 // 2 mb
+const MaxUploadSize = 100 * 1024 * 1024 // 2 mb
 // UploadPath :
 const UploadPath = "/home/dhost/cdn/data"
 
@@ -64,7 +64,8 @@ func UploadFileHandler() gin.HandlerFunc {
 		switch detectedFileType {
 		case "image/jpeg", "image/jpg":
 		case "image/gif", "image/png":
-		case "image/svg":
+		case "image/svg+xml":
+		case "image/webp":
 		case "application/pdf":
 			break
 		default:
@@ -94,6 +95,7 @@ func UploadFileHandler() gin.HandlerFunc {
 			return
 		}
 		dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName+fileEndings[0])
+		dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectID+"/images/"+fileName+fileEndings[0])
 		dataToStoreInDB := gjson.Parse(dataToStoreInDBStr)
 		err = dao.CdnDAO.Insert(dataToStoreInDB.Value())
 		if err != nil {

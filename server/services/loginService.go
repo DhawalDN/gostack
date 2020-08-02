@@ -6,12 +6,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Crearosoft/corelib/authmanager"
+
 	"github.com/tidwall/gjson"
 
 	"github.com/tidwall/sjson"
 
 	"github.com/DhawalDN/gostack/server/dao"
-	"github.com/DhawalDN/gostack/server/helpers"
 	"github.com/DhawalDN/gostack/server/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
@@ -113,7 +114,8 @@ func LoginUser(login models.Login) (interface{}, string) {
 	// 	fmt.Println("Password does not match")
 	// 	return bson.M{"token": false}, ""
 	// }
-	token, tokenError := helpers.GenerateToken(login.UserName, login.Password, 24*time.Hour)
+	expiresAt := time.Now().Add(24 * time.Hour).Unix()
+	token, tokenError := authmanager.GenerateToken(login.UserName, expiresAt)
 	if tokenError != nil {
 		log.Fatal("Unable to generate token")
 		return nil, ""
