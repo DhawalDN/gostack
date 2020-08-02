@@ -7,7 +7,6 @@ import (
 	"github.com/DhawalDN/gostack/server/helpers"
 	"github.com/DhawalDN/gostack/server/models"
 	"github.com/DhawalDN/gostack/server/routes"
-	"github.com/DhawalDN/gostack/server/services"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
@@ -55,6 +54,9 @@ func RestrictedRequestMiddleware() gin.HandlerFunc {
 		if strings.Trim(token, "") == "" {
 			fmt.Println("Token not available")
 			c.AbortWithStatusJSON(401, gin.H{"error": "Invalid API token"})
+		}
+		if login.UserName == "" {
+			c.AbortWithStatusJSON(401, gin.H{"error": "Token is invalid"})
 		}
 		// userres, isValid, usererr := services.ValidatedUser(login)
 		// if usererr != nil || !isValid {
