@@ -12,33 +12,31 @@ import (
 )
 
 //Login : Login
-func Login() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		loginDetails := models.Login{}
-		if c.Bind(&loginDetails) != nil {
-			fmt.Println("Coulnt Bind")
-		}
-		data, token := services.LoginUser(loginDetails)
-		fmt.Println(token)
-		c.Header("Authorization", token)
-		c.JSON(http.StatusOK, data)
-		fmt.Println(os.Getwd())
-		// c.String(http.StatusOK, )
+func Login(c *gin.Context) {
+	loginDetails := models.Login{}
+	if c.Bind(&loginDetails) != nil {
+		fmt.Println("Coulnt Bind")
 	}
+	data, token := services.LoginUser(loginDetails)
+	fmt.Println(token)
+	c.Header("Authorization", token)
+	c.JSON(http.StatusOK, data)
+	fmt.Println(os.Getwd())
+	// c.String(http.StatusOK, )
+
 }
 
 // Register func
-func Register() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		buyer := models.User{}
-		err := c.Bind(&buyer)
-		if err != nil {
-			fmt.Print(err)
-			c.JSON(http.StatusExpectationFailed, err)
-		}
-		services.AddUser(buyer)
-		c.String(http.StatusOK, "Customer registered successfully! \n ")
+func Register(c *gin.Context) {
+	buyer := models.User{}
+	err := c.Bind(&buyer)
+	if err != nil {
+		fmt.Print(err)
+		c.JSON(http.StatusExpectationFailed, err)
 	}
+	services.AddUser(buyer)
+	c.String(http.StatusOK, "Customer registered successfully! \n ")
+
 }
 
 // func RegisterTeam() gin.HandlerFunc {

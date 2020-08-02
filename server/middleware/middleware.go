@@ -24,7 +24,7 @@ func InitMiddleware(g *gin.Engine) {
 		c := v1.Group("/c")
 		c.Use(RoleBasedRequestMiddleware())
 
-		routes.InitLoginRoute(o)
+		// routes.InitLoginRoute(o)
 		routes.InitCdnRoutes(o, r)
 	}
 

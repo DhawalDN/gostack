@@ -9,8 +9,7 @@ import (
 // InitLoginRoute :
 func InitLoginRoute(o *gin.RouterGroup) {
 
-	o.POST("/login/register", handlers.Register())
+	o.POST("/api", handlers.CommonHandler())
 	// o.POST("/login/registerteam", handlers.RegisterTeam())
-	o.POST("/login/login", handlers.Login())
 
 }
