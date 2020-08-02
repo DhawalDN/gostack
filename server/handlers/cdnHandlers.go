@@ -78,30 +78,33 @@ func UploadFileHandler(c *gin.Context) {
 		renderError(w, "CANT_READ_FILE_TYPE", http.StatusInternalServerError)
 		return
 	}
-	newPath := filepath.Join(UploadPath, fileName+fileEndings[0])
+	dateDir := helpers.GetDateForPath()
+	newPath := filepath.Join(UploadPath, dateDir, fileName+fileEndings[0])
 	fmt.Printf("FileType: %s, File: %s\n", detectedFileType, newPath)
 
 	// write file
-	_ = os.MkdirAll(UploadPath, 0755)
+	_ = os.MkdirAll(UploadPath+"/"+dateDir, 0755)
 	newFile, err := os.Create(newPath)
+
 	if err != nil {
 		fmt.Println(err)
 		renderError(w, "Creation Error : CANT_WRITE_FILE", http.StatusInternalServerError)
 		return
 	}
-	defer newFile.Close() // idempotent, okay to call twice
+	defer helpers.CreateThumbnail(newPath, fileName)
 	if _, err := newFile.Write(fileBytes); err != nil || newFile.Close() != nil {
 		renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 		return
 	}
 	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName+fileEndings[0])
-	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectID+"/images/"+fileName+fileEndings[0])
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+fileEndings[0])
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "thumbnail", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+"_th"+fileEndings[0])
 	dataToStoreInDB := gjson.Parse(dataToStoreInDBStr)
 	err = dao.CdnDAO.Insert(dataToStoreInDB.Value())
 	if err != nil {
 		fmt.Println(err)
 	}
-	resultDataStr, _ = sjson.Set(resultDataStr, "result.relativePath", "/"+models.ProjectID+"/images/"+fileName+fileEndings[0])
+	resultDataStr, _ = sjson.Set(resultDataStr, "result.relativePath", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+fileEndings[0])
 	resultData := gjson.Parse(resultDataStr)
 	// byt, _ := json.Marshal(resultData.Value())
 	c.JSON(200, resultData.Value())

@@ -53,7 +53,7 @@ func startServer() {
 	md.AllowHeaders = []string{"*"}
 	md.AllowMethods = []string{"*"}
 	r.Use(cors.New(md))
-	r.Static("/"+models.ProjectID+"/files/", handlers.UploadPath)
+	r.Static("/"+models.ProjectID+"/images/", handlers.UploadPath)
 
 	middleware.InitMiddleware(r)
 	// http.HandleFunc("/upload", uploadFileHandler())

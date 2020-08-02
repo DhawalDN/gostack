@@ -2,6 +2,8 @@ package helpers
 
 import (
 	"errors"
+	"fmt"
+	"time"
 
 	authmanager "github.com/Crearosoft/corelib/authmanager"
 	"github.com/DhawalDN/gostack/server/models"
@@ -29,4 +31,11 @@ func GetUserNameFromToken(c *gin.Context) (models.Login, error) {
 	login.UserName = decodedToken["username"].(string)
 	login.Password = decodedToken["username"].(string)
 	return login, nil
+}
+
+//GetDateForPath date for only creating directory
+func GetDateForPath() string {
+	d := time.Now()
+	year, month, date := d.Date()
+	return fmt.Sprintf("%v%v%v", year, int(month), date)
 }
