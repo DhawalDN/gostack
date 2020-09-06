@@ -1,5 +1,11 @@
 package handlers
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:27:56 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"fmt"
 
@@ -21,7 +27,7 @@ func CommonHandler() gin.HandlerFunc {
 		case "Register":
 			Register(c)
 			break
-		case "UploadFileHandler":
+		case "UploadFile":
 			UploadFileHandler(c)
 			break
 			// case "Register":

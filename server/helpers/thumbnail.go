@@ -1,5 +1,11 @@
 package helpers
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:27:40 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"image"
 	jpeg "image/jpeg"

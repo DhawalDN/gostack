@@ -1,20 +1,16 @@
 package models
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:26:41 pm
+ * @copyright Crearosoft
+ */
+import (
+	"github.com/crearosoft/corelib/cachemanager"
+)
+
 // ProjectID that should be used for routing before Request
 var ProjectID string
-
-//Player : struct
-type Player struct {
-	PlayerID  string
-	BasePrice int64
-}
-
-//Bidder : struct
-type Bidder struct {
-	Bid       int    `json:"bid" bson:"bid"`
-	BuyerName string `json:"buyerName" bson:"buyerName"`
-	TeamName  string `json:"teamName" bson:"teamName"`
-}
 
 //User : User
 type User struct {
@@ -25,24 +21,11 @@ type User struct {
 	Username     string `json:"username"`
 }
 
-//BuyHelp : To add player
-type BuyHelp struct {
-	BuyerName string `json:"buyerName"`
-	PlayerID  string `json:"playerId"`
-}
-
 //Login : Login user
 type Login struct {
 	UserName string `json:"username"`
 	Password string `json:"password"`
 }
 
-//UpdateBid : Update current bid
-type UpdateBid struct {
-	Bid      int    `json:"bid" bson:"bid"`
-	PlayerID string `json:"playerId" bson:"playerId"`
-}
-
-// type BuyerName struct {
-// 	Name string `json:"name"`
-// }
+// FC is fastCache instance that can be initialized during start of server
+var FC *cachemanager.CacheHelper

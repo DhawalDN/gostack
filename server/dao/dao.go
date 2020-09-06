@@ -1,5 +1,11 @@
 package dao
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:28:11 pm
+ * @copyright Crearosoft
+ */
+
 var (
 
 	// UsersDAO - For DB Operation

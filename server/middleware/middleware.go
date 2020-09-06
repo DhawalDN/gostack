@@ -1,5 +1,11 @@
 package middleware
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:27:15 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"fmt"
 	"strings"

@@ -1,12 +1,18 @@
 package services
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:26:57 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"fmt"
 	"log"
 	"strings"
 	"time"
 
-	"github.com/Crearosoft/corelib/authmanager"
+	"github.com/crearosoft/corelib/authmanager"
 
 	"github.com/tidwall/gjson"
 

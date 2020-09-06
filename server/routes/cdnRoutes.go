@@ -1,5 +1,11 @@
 package routes
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:28:38 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"github.com/DhawalDN/gostack/server/handlers"
 	"github.com/gin-gonic/gin"

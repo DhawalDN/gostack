@@ -1,17 +1,23 @@
 package helpers
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:27:27 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"errors"
 	"fmt"
 	"time"
 
-	authmanager "github.com/Crearosoft/corelib/authmanager"
 	"github.com/DhawalDN/gostack/server/models"
+	authmanager "github.com/crearosoft/corelib/authmanager"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	authmanager.GlobalJWTKey = "Crearosoft"
+	authmanager.GlobalJWTKey = "crearosoft"
 }
 
 // GetUserNameFromToken login object from JWT Token

@@ -1,7 +1,15 @@
 package handlers
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @file Description
+ * @desc Created on 2020-08-31 4:28:02 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"crypto/rand"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"mime"
@@ -10,6 +18,8 @@ import (
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/DhawalDN/gostack/server/utility"
 
 	"github.com/DhawalDN/gostack/server/dao"
 	"github.com/DhawalDN/gostack/server/helpers"
@@ -96,15 +106,18 @@ func UploadFileHandler(c *gin.Context) {
 		renderError(w, "CANT_WRITE_FILE", http.StatusInternalServerError)
 		return
 	}
+	imageID := utility.GetGUID()
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "imageId", imageID)
 	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName+fileEndings[0])
-	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+fileEndings[0])
-	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "thumbnail", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+"_th"+fileEndings[0])
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectID+"/images/"+dateDir+"/"+imageID)
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "thumbnail", "/"+models.ProjectID+"/images/"+dateDir+"/"+imageID)
 	dataToStoreInDB := gjson.Parse(dataToStoreInDBStr)
+	models.FC.Set(imageID, dataToStoreInDB.Value())
 	err = dao.CdnDAO.Insert(dataToStoreInDB.Value())
 	if err != nil {
 		fmt.Println(err)
 	}
-	resultDataStr, _ = sjson.Set(resultDataStr, "result.relativePath", "/"+models.ProjectID+"/images/"+dateDir+"/"+fileName+fileEndings[0])
+	resultDataStr, _ = sjson.Set(resultDataStr, "result.relativePath", "/"+models.ProjectID+"/images/"+dateDir+"/"+imageID)
 	resultData := gjson.Parse(resultDataStr)
 	// byt, _ := json.Marshal(resultData.Value())
 	c.JSON(200, resultData.Value())
@@ -127,6 +140,26 @@ func GetUploadedFileData(c *gin.Context) {
 
 }
 
+// DownloadHandler - to Display image on request
+func DownloadHandler(c *gin.Context) {
+	dir := c.Param("directory")
+	imageID := c.Param("imageId")
+	// filePath := fmt.Sprintf("%v", c.Request.URL)
+	// filePath = UploadPath +strings.Replace(filePath, models.ProjectID+"/images/", "/", 1)
+	imageRef, isFound := models.FC.Get(imageID)
+	b, _ := json.Marshal(imageRef)
+	imgRef := gjson.ParseBytes(b)
+	// imageRef = imageRef.(map[string]interface{})
+	if isFound {
+		filePath := filepath.Join(UploadPath, dir, imgRef.Get("fileName").String())
+		c.File(filePath)
+		return
+	}
+	c.JSON(404, gin.H{
+		"status": "Not Found",
+		"reason": "Link may be expired or invalid",
+	})
+}
 func renderError(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(message))

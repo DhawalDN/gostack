@@ -1,12 +1,18 @@
 package dao
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:28:29 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"context"
 	"encoding/json"
 	"errors"
 	"log"
 
-	"github.com/Crearosoft/corelib/loggermanager"
+	"github.com/crearosoft/corelib/loggermanager"
 
 	"github.com/tidwall/gjson"
 	"go.mongodb.org/mongo-driver/bson"

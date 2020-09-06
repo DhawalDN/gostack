@@ -1,5 +1,11 @@
 package handlers
 
+/**
+ * @author Dhawal Dyavanpalli <dhawalhost@gmail.com>
+ * @desc Created on 2020-08-31 4:27:48 pm
+ * @copyright Crearosoft
+ */
+
 import (
 	"fmt"
 	"net/http"
