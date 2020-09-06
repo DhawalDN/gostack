@@ -7,7 +7,7 @@ package routes
  */
 
 import (
-	"github.com/DhawalDN/gostack/server/handlers"
+	"github.com/dhawalhost/gostack/server/handlers"
 
 	"github.com/gin-gonic/gin"
 )

@@ -19,12 +19,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/DhawalDN/gostack/server/utility"
+	"github.com/dhawalhost/gostack/server/utility"
 
-	"github.com/DhawalDN/gostack/server/dao"
-	"github.com/DhawalDN/gostack/server/helpers"
+	"github.com/dhawalhost/gostack/server/dao"
+	"github.com/dhawalhost/gostack/server/helpers"
 
-	"github.com/DhawalDN/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/models"
 	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
 	"github.com/tidwall/sjson"

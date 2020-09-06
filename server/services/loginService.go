@@ -18,8 +18,8 @@ import (
 
 	"github.com/tidwall/sjson"
 
-	"github.com/DhawalDN/gostack/server/dao"
-	"github.com/DhawalDN/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/dao"
+	"github.com/dhawalhost/gostack/server/models"
 	"go.mongodb.org/mongo-driver/bson"
 )
 

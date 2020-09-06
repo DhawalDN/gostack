@@ -23,10 +23,10 @@ import (
 
 	"github.com/tidwall/sjson"
 
-	"github.com/DhawalDN/gostack/server/dao"
-	"github.com/DhawalDN/gostack/server/handlers"
-	"github.com/DhawalDN/gostack/server/middleware"
-	"github.com/DhawalDN/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/dao"
+	"github.com/dhawalhost/gostack/server/handlers"
+	"github.com/dhawalhost/gostack/server/middleware"
+	"github.com/dhawalhost/gostack/server/models"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"

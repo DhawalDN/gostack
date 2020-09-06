@@ -10,9 +10,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/DhawalDN/gostack/server/helpers"
-	"github.com/DhawalDN/gostack/server/models"
-	"github.com/DhawalDN/gostack/server/routes"
+	"github.com/dhawalhost/gostack/server/helpers"
+	"github.com/dhawalhost/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/routes"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

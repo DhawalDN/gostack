@@ -11,7 +11,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/DhawalDN/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/models"
 	authmanager "github.com/crearosoft/corelib/authmanager"
 	"github.com/gin-gonic/gin"
 )

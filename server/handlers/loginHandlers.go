@@ -12,8 +12,8 @@ import (
 
 	"os"
 
-	"github.com/DhawalDN/gostack/server/models"
-	"github.com/DhawalDN/gostack/server/services"
+	"github.com/dhawalhost/gostack/server/models"
+	"github.com/dhawalhost/gostack/server/services"
 	"github.com/gin-gonic/gin"
 )
 
