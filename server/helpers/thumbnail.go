@@ -7,12 +7,12 @@ package helpers
  */
 
 import (
-	"image"
+	image "image"
 	jpeg "image/jpeg"
 	"os"
 	"strings"
 
-	"github.com/nfnt/resize"
+	resize "github.com/nfnt/resize"
 )
 
 type dimensions struct {
