@@ -16,6 +16,7 @@ import (
 	"os/signal"
 	"time"
 
+	"github.com/crearosoft/corelib/authmanager"
 	"github.com/crearosoft/corelib/loggermanager"
 
 	"github.com/crearosoft/corelib/cachemanager"
@@ -68,7 +69,7 @@ func initConfig(filename string) {
 	if err != nil {
 		loggermanager.LogError(err)
 	}
-	fmt.Println(models.ProjectCFG)
+	authmanager.GlobalJWTKey = models.ProjectCFG.GlobalJWTKey
 }
 func initAndStartServer(ci *cachemanager.CacheHelper) {
 	c := make(chan os.Signal, 1)

@@ -7,8 +7,6 @@ package handlers
  */
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,7 +14,6 @@ import (
 func CommonHandler() gin.HandlerFunc {
 	return gin.HandlerFunc(func(c *gin.Context) {
 		serviceToCall := c.GetHeader("service-header")
-		fmt.Println(serviceToCall)
 		switch serviceToCall {
 		case "GetUploadedFileData":
 			GetUploadedFileData(c)

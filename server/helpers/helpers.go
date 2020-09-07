@@ -11,13 +11,13 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/dhawalhost/gostack/server/models"
 	authmanager "github.com/crearosoft/corelib/authmanager"
+	"github.com/dhawalhost/gostack/server/models"
 	"github.com/gin-gonic/gin"
 )
 
 func init() {
-	authmanager.GlobalJWTKey = "crearosoft"
+	
 }
 
 // GetUserNameFromToken login object from JWT Token

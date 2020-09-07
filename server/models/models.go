@@ -17,6 +17,8 @@ type ProjectConfig struct {
 	ProjectID      string `json:"projectId"`
 	CachedFilePath string `json:"cachedFilePath"`
 	Hosts          Host   `json:"hosts"`
+	CdnPath        string `json:"cdnPath"`
+	GlobalJWTKey   string `json:"globalJWTKey"`
 }
 
 // Host -

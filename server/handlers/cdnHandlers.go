@@ -19,6 +19,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/crearosoft/corelib/loggermanager"
+
 	"github.com/dhawalhost/gostack/server/utility"
 
 	"github.com/dhawalhost/gostack/server/dao"
@@ -33,7 +35,7 @@ import (
 // MaxUploadSize :
 const MaxUploadSize = 100 * 1024 * 1024 // 2 mb
 // UploadPath :
-const UploadPath = "/home/dhost/cdn/data"
+var UploadPath = models.ProjectCFG.CdnPath
 
 // UploadFileHandler :
 func UploadFileHandler(c *gin.Context) {
@@ -90,8 +92,8 @@ func UploadFileHandler(c *gin.Context) {
 	}
 	dateDir := helpers.GetDateForPath()
 	// timestmp := fmt.Sprintf("%v", time.Now().Unix())
-	newPath := filepath.Join(UploadPath, dateDir, fileName+"_"+fmt.Sprintf("%v", time.Now().Unix())+fileEndings[0])
-	fmt.Printf("FileType: %s, File: %s\n", detectedFileType, newPath)
+	fileName = fileName + "_" + fmt.Sprintf("%v", time.Now().Unix()) + fileEndings[0]
+	newPath := filepath.Join(UploadPath, dateDir, fileName)
 
 	// write file
 	_ = os.MkdirAll(UploadPath+"/"+dateDir, 0755)
@@ -109,7 +111,7 @@ func UploadFileHandler(c *gin.Context) {
 	}
 	imageID := utility.GetGUID()
 	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "imageId", imageID)
-	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName+fileEndings[0])
+	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "fileName", fileName)
 	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "relativepath", "/"+models.ProjectCFG.ProjectID+"/images/"+dateDir+"/"+imageID)
 	dataToStoreInDBStr, _ = sjson.Set(dataToStoreInDBStr, "thumbnail", "/"+models.ProjectCFG.ProjectID+"/images/"+dateDir+"/"+imageID)
 	dataToStoreInDB := gjson.Parse(dataToStoreInDBStr)
@@ -130,13 +132,34 @@ func UploadFileHandler(c *gin.Context) {
 func GetUploadedFileData(c *gin.Context) {
 	rawBytes, _ := c.GetRawData()
 	rawData := gjson.ParseBytes(rawBytes)
+	expiryCheckDate := time.Now().Add(-24 * 7 * time.Hour).Unix()
 	aggr := gjson.ParseBytes([]byte(fmt.Sprintf(`[
 		{"$match":{"username":"%s"}},
 		{"$sort":{"createdOn":-1}},
-		{"$skip":%d}
-		{"$limit":%d}
-		]`, rawData.Get("username").String(), rawData.Get("skip").Int(), rawData.Get("limit").Int())))
-	rs, _ := dao.CdnDAO.GetAggregateData(aggr.Value())
+		{"$skip":%d},
+		{"$limit":%d},
+		{
+			"$set": {
+				"isExpired": {
+					"$cond": {
+						"if": {
+							"$lte": [
+								"$createdOn",
+								%v
+							]
+						},
+						"then": true,
+						"else": false
+					}
+				}
+			}
+		}
+		]`, rawData.Get("username").String(), rawData.Get("skip").Int(), rawData.Get("limit").Int(), expiryCheckDate)))
+	rs, err := dao.CdnDAO.GetAggregateData(aggr.Value())
+	fmt.Println(aggr)
+	if err != nil {
+		loggermanager.LogError(err)
+	}
 	c.JSON(200, rs.Value())
 
 }

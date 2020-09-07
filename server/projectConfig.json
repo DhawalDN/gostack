@@ -6,5 +6,7 @@
             "serverIP":"localhost",
             "port":27017
         }
-    }
+    },
+    "cdnPath":"./home/dhost/cdn/data",
+    "globalJWTKey":"Crearosoft"
 }
