@@ -8,6 +8,7 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,10 +19,6 @@ import (
 	"github.com/crearosoft/corelib/loggermanager"
 
 	"github.com/crearosoft/corelib/cachemanager"
-
-	"github.com/tidwall/gjson"
-
-	"github.com/tidwall/sjson"
 
 	"github.com/dhawalhost/gostack/server/dao"
 	"github.com/dhawalhost/gostack/server/handlers"
@@ -35,10 +32,9 @@ import (
 func main() {
 	// initConfig(os.Args[1])
 	initConfig("/home/dhost/server/gostack/projectConfig.json")
-	// fmt.Println(ProjectID)
-	dao.InitDB("localhost", 27017)
+	dao.InitDB(models.ProjectCFG.Hosts.Mongo.ServerIP, models.ProjectCFG.Hosts.Mongo.Port)
 	dao.InitDAO()
-	c := startCacheServer("./cachelogs")
+	c := startCacheServer(models.ProjectCFG.CachedFilePath)
 	models.FC = c
 	initAndStartServer(c)
 
@@ -65,18 +61,14 @@ func initConfig(filename string) {
 	// if err1 != nil {
 	// log.Fatal(err1)
 	// }
-
 	// fmt.Println(fp)
 	file, _ := ioutil.ReadFile(filename)
-	var data interface{}
-	err := json.Unmarshal([]byte(file), &data)
+	// var data interface{}
+	err := json.Unmarshal([]byte(file), &models.ProjectCFG)
 	if err != nil {
-		loggermanager.LogError("Error in Parsing the File")
+		loggermanager.LogError(err)
 	}
-	projectConfigTemp := `{}`
-	projectConfigTemp, _ = sjson.Set(projectConfigTemp, "projectConfig", data)
-	projectConfig := gjson.Parse(projectConfigTemp)
-	models.ProjectID = projectConfig.Get("projectConfig.projectId").String()
+	fmt.Println(models.ProjectCFG)
 }
 func initAndStartServer(ci *cachemanager.CacheHelper) {
 	c := make(chan os.Signal, 1)
@@ -101,8 +93,8 @@ func startServer(ctx context.Context, ci *cachemanager.CacheHelper) (err error) 
 	md.AllowHeaders = []string{"*"}
 	md.AllowMethods = []string{"*"}
 	r.Use(cors.New(md))
-	r.GET("/"+models.ProjectID+"/images/:directory/:imageId", handlers.DownloadHandler)
-	// r.Static("/"+models.ProjectID+"/images/", handlers.UploadPath)
+	r.GET("/"+models.ProjectCFG.ProjectID+"/images/:directory/:imageId", handlers.DownloadHandler)
+	// r.Static("/"+models.ProjectCFG.ProjectID+"/images/", handlers.UploadPath)
 
 	middleware.InitMiddleware(r)
 	// http.HandleFunc("/upload", uploadFileHandler())
@@ -121,7 +113,7 @@ func startServer(ctx context.Context, ci *cachemanager.CacheHelper) (err error) 
 
 	<-ctx.Done()
 
-	ci.SaveFile("./cachelogs")
+	ci.SaveFile(models.ProjectCFG.CachedFilePath)
 	loggermanager.LogError("server stopped")
 
 	ctxShutDown, cancel := context.WithTimeout(context.Background(), 5*time.Second)

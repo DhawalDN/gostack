@@ -1,3 +1,10 @@
 {
-    "projectId":"cdn"
+    "projectId":"cdn",
+    "cachedFilePath":"/home/dhost/server/gostack/config/cachedFileData",
+    "hosts":{
+        "mongo":{
+            "serverIP":"localhost",
+            "port":27017
+        }
+    }
 }

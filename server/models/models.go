@@ -9,8 +9,26 @@ import (
 	"github.com/crearosoft/corelib/cachemanager"
 )
 
-// ProjectID that should be used for routing before Request
-var ProjectID string
+// ProjectCFG that should be used for routing before Request
+var ProjectCFG ProjectConfig
+
+// ProjectConfig -
+type ProjectConfig struct {
+	ProjectID      string `json:"projectId"`
+	CachedFilePath string `json:"cachedFilePath"`
+	Hosts          Host   `json:"hosts"`
+}
+
+// Host -
+type Host struct {
+	Mongo MongoHost `json:"mongo"`
+}
+
+// MongoHost -
+type MongoHost struct {
+	ServerIP string `json:"serverIP"`
+	Port     int    `json:"port"`
+}
 
 //User : User
 type User struct {

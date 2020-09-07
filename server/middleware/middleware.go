@@ -21,7 +21,7 @@ import (
 func InitMiddleware(g *gin.Engine) {
 	g.Use(cors.Default()) // CORS request
 	fmt.Println("InitMiddleware called")
-	v1 := g.Group("/" + models.ProjectID + "")
+	v1 := g.Group("/" + models.ProjectCFG.ProjectID + "")
 	{
 		o := v1.Group("/o")
 		o.Use(OpenRequestMiddleware())
