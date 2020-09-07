@@ -7,6 +7,6 @@
             "port":27017
         }
     },
-    "cdnPath":"./home/dhost/cdn/data",
+    "cdnPath":"/home/dhost/cdn/data",
     "globalJWTKey":"Crearosoft"
 }
