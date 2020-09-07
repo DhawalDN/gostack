@@ -89,7 +89,8 @@ func UploadFileHandler(c *gin.Context) {
 		return
 	}
 	dateDir := helpers.GetDateForPath()
-	newPath := filepath.Join(UploadPath, dateDir, fileName+fileEndings[0])
+	// timestmp := fmt.Sprintf("%v", time.Now().Unix())
+	newPath := filepath.Join(UploadPath, dateDir, fileName+"_"+fmt.Sprintf("%v", time.Now().Unix())+fileEndings[0])
 	fmt.Printf("FileType: %s, File: %s\n", detectedFileType, newPath)
 
 	// write file
