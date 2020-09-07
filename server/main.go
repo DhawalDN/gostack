@@ -8,7 +8,6 @@ package main
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -18,6 +17,7 @@ import (
 
 	"github.com/crearosoft/corelib/authmanager"
 	"github.com/crearosoft/corelib/loggermanager"
+	"github.com/robfig/cron"
 
 	"github.com/crearosoft/corelib/cachemanager"
 
@@ -30,6 +30,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func startCronJob(ci *cachemanager.CacheHelper) {
+	c := cron.New()
+	c.AddFunc("CRON_TZ=Asia/Calcutta 00 00 * * *", func() {
+		ci.SaveFile(models.ProjectCFG.CachedFilePath)
+	})
+	c.Start()
+}
 func main() {
 	// initConfig(os.Args[1])
 	initConfig("/home/dhost/server/gostack/projectConfig.json")
@@ -96,7 +103,7 @@ func startServer(ctx context.Context, ci *cachemanager.CacheHelper) (err error) 
 	r.Use(cors.New(md))
 	r.GET("/"+models.ProjectCFG.ProjectID+"/images/:directory/:imageId", handlers.DownloadHandler)
 	// r.Static("/"+models.ProjectCFG.ProjectID+"/images/", handlers.UploadPath)
-
+	startCronJob(ci)
 	middleware.InitMiddleware(r)
 	// http.HandleFunc("/upload", uploadFileHandler())
 	srv := &http.Server{
@@ -135,4 +142,4 @@ func startServer(ctx context.Context, ci *cachemanager.CacheHelper) (err error) 
 
 }
 
-// To build: use this command go build -ldflags="-s -w" main.go
+// To build: use this command go build -ldflags="-s -w" -o gostack main.go
