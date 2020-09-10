@@ -76,6 +76,7 @@ func initConfig(filename string) {
 	if err != nil {
 		loggermanager.LogError(err)
 	}
+	handlers.UploadPath = models.ProjectCFG.CdnPath
 	authmanager.GlobalJWTKey = models.ProjectCFG.GlobalJWTKey
 }
 func initAndStartServer(ci *cachemanager.CacheHelper) {

@@ -25,7 +25,7 @@ func CommonHandler() gin.HandlerFunc {
 			Register(c)
 			break
 		case "UploadFile":
-			UploadFileHandler(c)
+			UploadFileHandlerCommon(c)
 			break
 			// case "Register":
 			// 	GetUploadedFileData(c)

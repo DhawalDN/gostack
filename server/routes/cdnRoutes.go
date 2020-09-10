@@ -14,6 +14,8 @@ import (
 // InitCdnRoutes :
 func InitCdnRoutes(o, r *gin.RouterGroup) {
 	o.POST("/api", handlers.CommonHandler())
+	o.POST("/upload", handlers.UploadFileHandler())
+	// r.POST("/upload", handlers.UploadFileHandler())
 	r.POST("/api", handlers.CommonHandler())
 
 	// o.StaticFS("/files/", gin.Dir(handlers.UploadPath, true))
