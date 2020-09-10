@@ -274,6 +274,19 @@ func DownloadHandler(c *gin.Context) {
 		"reason": "Link may be expired or invalid",
 	})
 }
+
+// CacheBackup -  getting backup of Cache Data into backupfile
+func CacheBackup(c *gin.Context) {
+	status := "Success"
+	if err := models.FC.SaveFile(models.ProjectCFG.CachedFilePath); err != nil {
+		loggermanager.LogError("Error while Creating Backup for Cache Data")
+		status = "Failed"
+	}
+
+	c.JSON(404, gin.H{
+		"status": status,
+	})
+}
 func renderError(w http.ResponseWriter, message string, statusCode int) {
 	w.WriteHeader(http.StatusBadRequest)
 	w.Write([]byte(message))
